@@ -2,6 +2,7 @@
 let isLoggedIn = false;
 let cart = [];
 let myproducts = [];
+const serverName="shopping-sqlitedb.onrender.com";
 function submitOrder() {
     if (!isLoggedIn) {
         alert("請先登入！");
@@ -24,7 +25,7 @@ function submitOrder() {
     console.log("orders list :" + JSON.stringify(order));
 
     $.ajax({
-        url: "http://localhost:8080/api/orders",
+        url: `https://${serverName}/api/orders`,
         type: "POST",
         contentType: "application/json",
         headers: {
@@ -38,7 +39,12 @@ function submitOrder() {
         }
     });
 }
-
+function removeFromCart(index){
+    if(cart.length>0){
+        cart.splice(index,1);
+        updateCart();
+    }
+}
 function updateCart() {
     $('#cartItems').empty();
     let total = 0;
@@ -60,7 +66,6 @@ function updateCart() {
 }
 
 function start() {   
-	isLoggedIn=false;
     $('.nav-link').click(function (e) {
         e.preventDefault();
         let target = $(this).data('target');
@@ -78,7 +83,7 @@ function start() {
         const pass = $('#password').val();
 
         $.ajax({
-            url: "http://localhost:8080/api/user/login",
+            url: `https://${serverName}/api/user/login`,
             type: "POST",
             contentType: "application/json",
             data: JSON.stringify({ username: user, password: pass }),
@@ -100,7 +105,7 @@ function start() {
     function loadProducts() {
         $('#productList').empty();
         $.ajax({
-            url: "http://localhost:8080/api/products",
+            url: `https://${serverName}/api/products`,
             type: "GET",
             dataType: "json",
             success: function (products) {
@@ -150,7 +155,7 @@ function showOrders() {
          </div>
     `);
     $.ajax({
-        url: "http://localhost:8080/api/orders/"+sessionStorage.getItem("username"),
+        url: `https://${serverName}/api/orders/`+sessionStorage.getItem("username"),
         type: "GET",
         dataType: "json",
         success: function (orders) {           
@@ -192,7 +197,7 @@ function showDetails(orderid){
         
     `);
     $.ajax({
-        url: "http://localhost:8080/api/orders/orderid/"+orderid,
+        url: `https://${serverName}/api/orders/orderid/`+orderid,
         type: "GET",
         dataType: "json",
         success: function (order) {           
@@ -234,7 +239,7 @@ function showItemDetails(orderid) {
          </div>
     `);
     $.ajax({
-        url: "http://localhost:8080/api/items/"+orderid,
+        url: `https://${serverName}/api/items/`+orderid,
         type: "GET",
         dataType: "json",
         success: function (items) {           
