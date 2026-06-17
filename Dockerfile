@@ -23,4 +23,4 @@ COPY --from=builder /app/target/*.jar app.jar
 ENTRYPOINT ["java", "-jar", "app.jar"]
 
 # 宣告服務使用的 port（Render 預設讀取此值）
-EXPOSE 8080
+EXPOSE 9090
